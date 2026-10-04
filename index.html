@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f0e5">
+<title>Даниял & Гаухар — Беташар</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Marck+Script&family=Playfair+Display:wght@400;500;600&display=swap');
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;background:#f5ecdf;color:#594331}
+body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
+.stage{min-height:100svh;display:grid;place-items:center;padding:22px 14px;position:relative;background:radial-gradient(ellipse at center,#fffaf2 0%,#f4e8d8 70%,#e9d8c3 100%);overflow:hidden}
+.glow{position:absolute;width:75vw;height:75vw;max-width:650px;max-height:650px;border:1px solid #c9a76c55;border-radius:50%;animation:pulse 5s ease-in-out infinite}
+.glow:before,.glow:after{content:"";position:absolute;inset:18px;border:1px solid #c9a76c55;border-radius:50%}.glow:after{inset:38px}
+.card{width:min(100%,440px);min-height:760px;max-height:calc(100svh - 28px);overflow:auto;position:relative;z-index:1;text-align:center;padding:35px 25px 30px;background:linear-gradient(145deg,#fffdf8ed,#f8efdfed);border:1px solid #c7a66d;box-shadow:0 22px 70px #71533325;outline:5px solid #c7a66d22;outline-offset:5px}
+.corner{position:absolute;width:78px;height:78px;border-color:#b48a4b;border-style:solid;opacity:.75}.tl{top:10px;left:10px;border-width:1px 0 0 1px}.tr{top:10px;right:10px;border-width:1px 1px 0 0}.bl{bottom:10px;left:10px;border-width:0 0 1px 1px}.br{bottom:10px;right:10px;border-width:0 1px 1px 0}
+.ornament{font-size:27px;color:#b38b50;letter-spacing:9px;margin:5px 0 14px;animation:fade 1.5s both}
+.small{font-size:14px;letter-spacing:5px;text-transform:uppercase;color:#9b7746}
+.headline{font-size:clamp(30px,8vw,43px);font-weight:500;letter-spacing:5px;color:#9c7440;margin:9px 0 4px}
+.script{font-family:'Marck Script',cursive;font-size:clamp(40px,10vw,54px);color:#76563d;line-height:1.15}
+.names{margin:12px 0 2px;font-family:'Playfair Display',serif;font-size:clamp(27px,7vw,37px);color:#795d3c}
+.amp{color:#b18b52;font-style:italic;font-size:27px}
+.rule{width:100px;height:1px;background:#c7a66d;margin:18px auto;position:relative}.rule:after{content:"✦";position:absolute;left:50%;top:-11px;transform:translateX(-50%);background:#fbf5eb;padding:0 9px;color:#b18b52}
+.copy{font-size:20px;line-height:1.4;margin:15px auto;max-width:330px}
+.details{margin:22px auto 16px;padding:14px 0;border-top:1px solid #d8c29d;border-bottom:1px solid #d8c29d;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail b{display:block;font-size:23px;font-weight:600;color:#8b673e}.detail span{font-size:13px;letter-spacing:2px;color:#9c805d}
+.place{font-size:18px;line-height:1.45;margin:10px auto}
+.map{display:inline-block;color:#8b673e;border:1px solid #b9955d;padding:9px 20px;text-decoration:none;letter-spacing:1px;margin-top:7px;transition:.3s}.map:hover{background:#b9955d;color:white}
+.host{font-size:18px;margin-top:20px}.host strong{display:block;font-size:22px;color:#8b673e;font-weight:500}
+.footer{font-family:'Marck Script',cursive;font-size:26px;color:#9c7748;margin-top:18px}
+.music{position:fixed;z-index:5;right:17px;top:17px;border:1px solid #b9955d;background:#fffaf0;color:#8b673e;border-radius:50%;width:46px;height:46px;font-size:19px;box-shadow:0 4px 18px #5a3e2022;cursor:pointer}
+.cover{position:fixed;inset:0;z-index:10;background:radial-gradient(circle,#fffaf2,#e8d6bd);display:grid;place-items:center;text-align:center;padding:25px;transition:opacity 1.1s,visibility 1.1s}
+.cover.hide{opacity:0;visibility:hidden;pointer-events:none}
+.envelope{width:min(82vw,330px);height:220px;position:relative;margin:25px auto 30px;filter:drop-shadow(0 15px 15px #674a282b);cursor:pointer}
+.envbody{position:absolute;inset:0;background:#e8d5b7;border:1px solid #b18b52;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);}
+.flap{position:absolute;inset:0;background:#d9c09a;clip-path:polygon(0 0,100% 0,50% 62%);transform-origin:top;transition:transform 1s ease;z-index:2;border-top:1px solid #b18b52}
+.seal{position:absolute;z-index:3;left:50%;top:48%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:#a77e43;color:#fff4df;display:grid;place-items:center;font-size:24px;box-shadow:0 2px 6px #6b482c55;transition:opacity .4s}
+.open .flap{transform:rotateX(180deg)}.open .seal{opacity:0}
+.cover-title{font-family:'Marck Script',cursive;font-size:42px;color:#80603b}.tap{letter-spacing:3px;font-size:12px;color:#9d7b4e;animation:pulse 2s infinite}
+.petal{position:fixed;top:-30px;z-index:2;pointer-events:none;color:#c49a68;animation:fall linear infinite;opacity:.65}
+@keyframes fall{to{transform:translate3d(var(--drift),110vh,0) rotate(540deg);opacity:0}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.04);opacity:1}}
+@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.content>*{animation:fade 1.2s both}.content>*:nth-child(2){animation-delay:.2s}.content>*:nth-child(3){animation-delay:.4s}.content>*:nth-child(4){animation-delay:.6s}
+@media(max-height:760px){.card{min-height:0}}
+</style></head>
+<body>
+<audio id="music" loop preload="auto" src="assets/music.mp3"></audio>
+<button class="music" id="musicBtn" aria-label="Музыканы қосу">♫</button>
+<div class="cover" id="cover">
+ <div>
+  <div class="small">Арнайы шақыру</div>
+  <div class="envelope" id="envelope" role="button" aria-label="Шақыруды ашу" tabindex="0">
+   <div class="envbody"></div><div class="flap"></div><div class="seal">Д<span style="font-size:13px">♥</span>Г</div>
+  </div>
+  <div class="cover-title">Даниял &amp; Гаухар</div>
+  <div class="tap">АШУ ҮШІН ОСЫ ЖЕРДІ БАСЫҢЫЗ</div><button id="openBtn" style="margin-top:18px;padding:12px 24px;border:1px solid #b9955d;background:#fffaf0;color:#8b673e;letter-spacing:2px;font:inherit">ШАҚЫРУДЫ АШУ</button>
+ </div>
+</div>
+<div class="stage">
+<div class="glow"></div>
+<main class="card">
+<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+<div class="content">
+<div class="ornament">❧ ✦ ❧</div>
+<div class="small">Құрметті ағайын-туыс, бауырлар!</div>
+<div class="headline">БЕТАШАР</div>
+<div class="script">тойына шақырамыз</div>
+<div class="rule"></div>
+<div class="small">Бақытты күн иелері</div>
+<div class="names">Даниял <span class="amp">&amp;</span> Гаухар</div>
+<div class="copy">Сіздерді ұлымыз бен келініміздің беташар тойының қуанышына ортақтасуға шақырамыз!</div>
+<div class="ornament">❦</div>
+<div class="details">
+ <div class="detail"><span>КҮНІ</span><b>10 қазан</b><span>2026 жыл</span></div>
+ <div class="detail"><span>БАСТАЛУЫ</span><b>14:00</b><span>сағат</span></div>
+</div>
+<div class="place">Беташар өз үйімізде өтеді.<br>Мекенжайын картадан көре аласыз.</div>
+<a class="map" href="https://2gis.ru/geolocation/od9vyfbg3o4n71xgqf1xvsb8" target="_blank" rel="noopener">⌖ МЕКЕНЖАЙДЫ КӨРУ</a>
+<div class="host">Ізгі тілекпен, ұйымдастырушылар:<strong>Ғани мен Гаухар</strong></div>
+<div class="rule"></div>
+<div class="footer">Сіздерді асыға күтеміз!</div>
+<div class="ornament">❧ ✦ ❧</div>
+</div></main></div>
+<script>
+const cover=document.getElementById('cover'),env=document.getElementById('envelope'),audio=document.getElementById('music'),btn=document.getElementById('musicBtn');
+function openInvite(){env.classList.add('open');audio.play().catch(()=>{});btn.textContent='♫';setTimeout(()=>cover.classList.add('hide'),700)}
+env.addEventListener('click',openInvite);document.getElementById('openBtn').addEventListener('click',openInvite);cover.addEventListener('click',e=>{if(e.target===cover)openInvite()});env.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openInvite()});
+btn.addEventListener('click',()=>{if(audio.paused){audio.play().catch(()=>{});btn.textContent='♫'}else{audio.pause();btn.textContent='♪'}});
+for(let i=0;i<22;i++){let p=document.createElement('span');p.className='petal';p.textContent=['✦','❀','·','❧'][i%4];p.style.left=Math.random()*100+'%';p.style.animationDuration=(9+Math.random()*12)+'s';p.style.animationDelay=(-Math.random()*18)+'s';p.style.fontSize=(12+Math.random()*15)+'px';p.style.setProperty('--drift',(Math.random()*180-90)+'px');document.body.appendChild(p)}
+</script></body></html>
