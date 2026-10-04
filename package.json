@@ -1,0 +1,13 @@
+{
+  "name": "betashar-daniyal-gaukhar",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Даниял & Гаухар — Беташар invitation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
