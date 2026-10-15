@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -80,7 +81,6 @@ body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
 </head>
 <body>
 
-<!-- Музыкальный файл должен лежать в папке assets -->
 <audio id="music" loop preload="none" src="assets/new-music.mp3"></audio>
 <button class="music" id="musicBtn" aria-label="Музыканы қосу" aria-pressed="false">♫</button>
 
@@ -88,7 +88,9 @@ body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
  <div>
   <div class="small">Арнайы шақыру</div>
   <div class="envelope" id="envelope" role="button" aria-label="Шақыруды ашу" tabindex="0">
-   <div class="envbody"></div><div class="flap"></div><div class="seal">Д<span style="font-size:13px">♥</span>Г</div>
+   <div class="envbody"></div>
+   <div class="flap"></div>
+   <div class="seal">Д<span style="font-size:13px">♥</span>Г</div>
   </div>
   <div class="cover-title">Даниял &amp; Гаухар</div>
   <div class="tap">АШУ ҮШІН ОСЫ ЖЕРДІ БАСЫҢЫЗ</div>
@@ -114,7 +116,11 @@ body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
  <div class="detail"><span>КҮНІ</span><b>03 қараша</b><span>2026 жыл</span></div>
  <div class="detail"><span>БАСТАЛУЫ</span><b>19:00</b><span>сағат</span></div>
 </div>
-<div class="place"><span class="place-label">ТОЙ САЛТАНАТЫ ӨТЕТІН ОРЫН</span><strong>«Altyn Ballroom» тойханасы</strong><span class="place-note">Мекенжайын картадан көре аласыз.</span></div>
+<div class="place">
+ <span class="place-label">ТОЙ САЛТАНАТЫ ӨТЕТІН ОРЫН</span>
+ <strong>«Altyn Ballroom» тойханасы</strong>
+ <span class="place-note">Мекенжайын картадан көре аласыз.</span>
+</div>
 <a class="map" href="https://2gis.kz/shymkent/firm/70000001113194708" target="_blank" rel="noopener">⌖ МЕКЕНЖАЙДЫ КӨРУ</a>
 
 <section class="rsvp" id="rsvp">
@@ -128,8 +134,14 @@ body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
   <input type="hidden" id="attendance" name="attendance" value="yes">
   <div id="guestDetails">
    <label class="rsvp-field" for="guestCount">Неше адам келесіздер?</label>
-   <select id="guestCount" name="guestCount"><option value="1">1 адам</option><option value="2">2 адам</option></select>
-   <div class="guest-fields" id="guestFields"><label class="rsvp-field" for="guest1">Аты-жөніңіз</label><input id="guest1" name="guest1" autocomplete="name" maxlength="100" placeholder="Мысалы: Айдос Нұрланов" required></div>
+   <select id="guestCount" name="guestCount">
+    <option value="1">1 адам</option>
+    <option value="2">2 адам</option>
+   </select>
+   <div class="guest-fields" id="guestFields">
+    <label class="rsvp-field" for="guest1">Аты-жөніңіз</label>
+    <input id="guest1" name="guest1" autocomplete="name" maxlength="100" placeholder="Мысалы: Айдос Нұрланов" required>
+   </div>
   </div>
   <button class="rsvp-submit" id="rsvpSubmit" type="submit">Жауапты жіберу</button>
   <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
@@ -145,152 +157,192 @@ body{font-family:'Cormorant Garamond',serif;overflow-x:hidden}
 </div>
 
 <script>
-const cover=document.getElementById('cover');
-const env=document.getElementById('envelope');
-const audio=document.getElementById('music');
-const btn=document.getElementById('musicBtn');
+const cover = document.getElementById('cover');
+const env = document.getElementById('envelope');
+const audio = document.getElementById('music');
+const btn = document.getElementById('musicBtn');
 
-async function playMusic(){
-  try{
-    await audio.play();
-    btn.textContent='♫';
-    btn.setAttribute('aria-pressed','true');
-  }catch(error){
-    btn.textContent='♪';
-    btn.setAttribute('aria-pressed','false');
-    console.warn('Музыка ойнатылмады. Файл жолын тексеріңіз:',error);
+function playMusic() {
+  audio.muted = false;
+
+  const promise = audio.play();
+
+  if (promise !== undefined) {
+    promise.then(() => {
+      btn.textContent = '♫';
+      btn.setAttribute('aria-pressed', 'true');
+    }).catch((error) => {
+      btn.textContent = '♪';
+      btn.setAttribute('aria-pressed', 'false');
+      console.warn('Музыка не запустилась:', error);
+    });
   }
 }
 
-function openInvite(){
+function openInvite() {
   env.classList.add('open');
-  setTimeout(()=>cover.classList.add('hide'),700);
+  cover.classList.add('hide');
   playMusic();
 }
 
-env.addEventListener('click',openInvite);
-document.getElementById('openBtn').addEventListener('click',openInvite);
-cover.addEventListener('click',e=>{if(e.target===cover)openInvite()});
-env.addEventListener('keydown',e=>{
-  if(e.key==='Enter'||e.key===' '){
+env.addEventListener('click', openInvite);
+document.getElementById('openBtn').addEventListener('click', openInvite);
+
+cover.addEventListener('click', (e) => {
+  if (e.target === cover) openInvite();
+});
+
+env.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
     openInvite();
   }
 });
 
-btn.addEventListener('click',async()=>{
-  if(audio.paused){
-    await playMusic();
-  }else{
+btn.addEventListener('click', () => {
+  if (audio.paused) {
+    playMusic();
+  } else {
     audio.pause();
-    btn.textContent='♪';
-    btn.setAttribute('aria-pressed','false');
+    btn.textContent = '♪';
+    btn.setAttribute('aria-pressed', 'false');
   }
 });
 
-audio.addEventListener('error',()=>{
+audio.addEventListener('error', () => {
   console.error('Музыкалық файл табылмады: assets/new-music.mp3');
 });
 
-const rsvpForm=document.getElementById('rsvpForm');
-const attendance=document.getElementById('attendance');
-const guestCount=document.getElementById('guestCount');
-const guestFields=document.getElementById('guestFields');
-const guestDetails=document.getElementById('guestDetails');
-const rsvpStatus=document.getElementById('rsvpStatus');
-const rsvpSubmit=document.getElementById('rsvpSubmit');
+const rsvpForm = document.getElementById('rsvpForm');
+const attendance = document.getElementById('attendance');
+const guestCount = document.getElementById('guestCount');
+const guestFields = document.getElementById('guestFields');
+const guestDetails = document.getElementById('guestDetails');
+const rsvpStatus = document.getElementById('rsvpStatus');
+const rsvpSubmit = document.getElementById('rsvpSubmit');
 
-function renderGuestFields(){
- const count=Number(guestCount.value);
- guestFields.innerHTML='';
- for(let i=1;i<=count;i++){
-  const label=document.createElement('label');
-  label.className='rsvp-field';
-  label.htmlFor='guest'+i;
-  label.textContent=count===1?'Қонақтың аты-жөні':`${i}-қонақтың аты-жөні`;
-  const input=document.createElement('input');
-  input.id='guest'+i;
-  input.name='guest'+i;
-  input.maxLength=100;
-  input.autocomplete=i===1?'name':'off';
-  input.placeholder=i===1?'Мысалы: Айдос Нұрланов':'Мысалы: Айгүл Нұрланова';
-  input.required=true;
-  guestFields.append(label,input);
- }
+function renderGuestFields() {
+  const count = Number(guestCount.value);
+  guestFields.innerHTML = '';
+
+  for (let i = 1; i <= count; i++) {
+    const label = document.createElement('label');
+    label.className = 'rsvp-field';
+    label.htmlFor = 'guest' + i;
+    label.textContent = count === 1
+      ? 'Қонақтың аты-жөні'
+      : `${i}-қонақтың аты-жөні`;
+
+    const input = document.createElement('input');
+    input.id = 'guest' + i;
+    input.name = 'guest' + i;
+    input.maxLength = 100;
+    input.autocomplete = i === 1 ? 'name' : 'off';
+    input.placeholder = i === 1
+      ? 'Мысалы: Айдос Нұрланов'
+      : 'Мысалы: Айгүл Нұрланова';
+    input.required = true;
+
+    guestFields.append(label, input);
+  }
 }
 
 renderGuestFields();
-guestCount.addEventListener('change',renderGuestFields);
+guestCount.addEventListener('change', renderGuestFields);
 
-document.querySelectorAll('.rsvp-choice').forEach(choice=>choice.addEventListener('click',()=>{
- const yes=choice.dataset.answer==='yes';
- attendance.value=yes?'yes':'no';
- document.querySelectorAll('.rsvp-choice').forEach(b=>{
-  const active=b===choice;
-  b.classList.toggle('active',active);
-  b.setAttribute('aria-pressed',String(active));
- });
- guestDetails.hidden=!yes;
- guestFields.querySelectorAll('input').forEach(input=>input.required=yes);
- rsvpStatus.textContent='';
- rsvpStatus.className='rsvp-status';
-}));
+document.querySelectorAll('.rsvp-choice').forEach(choice => {
+  choice.addEventListener('click', () => {
+    const yes = choice.dataset.answer === 'yes';
+    attendance.value = yes ? 'yes' : 'no';
 
-rsvpForm.addEventListener('submit',async e=>{
- e.preventDefault();
- rsvpStatus.textContent='';
- rsvpStatus.className='rsvp-status';
- const payload={
-  attendance:attendance.value,
-  guestCount:attendance.value==='yes'?Number(guestCount.value):0,
-  guests:attendance.value==='yes'?Array.from(guestFields.querySelectorAll('input')).map(input=>input.value.trim()):[]
- };
- if(attendance.value==='yes'&&payload.guests.some(name=>!name)){
-  rsvpStatus.textContent='Барлық адамның аты-жөнін жазыңыз.';
-  rsvpStatus.classList.add('error');
-  return;
- }
- rsvpSubmit.disabled=true;
- rsvpSubmit.textContent='Жіберілуде…';
- try{
-  const response=await fetch('/api/rsvp',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify(payload)
+    document.querySelectorAll('.rsvp-choice').forEach(b => {
+      const active = b === choice;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+
+    guestDetails.hidden = !yes;
+    guestFields.querySelectorAll('input').forEach(input => {
+      input.required = yes;
+    });
+
+    rsvpStatus.textContent = '';
+    rsvpStatus.className = 'rsvp-status';
   });
-  const data=await response.json();
-  if(!response.ok)throw new Error(data.error||'Жауапты жіберу мүмкін болмады.');
-  rsvpStatus.textContent='Жауабыңыз қабылданды! Рақмет.';
-  rsvpStatus.classList.add('ok');
-  rsvpForm.reset();
-  attendance.value='yes';
-  guestCount.value='1';
-  document.querySelectorAll('.rsvp-choice').forEach(b=>{
-   const active=b.dataset.answer==='yes';
-   b.classList.toggle('active',active);
-   b.setAttribute('aria-pressed',String(active));
-  });
-  guestDetails.hidden=false;
-  renderGuestFields();
- }catch(err){
-  rsvpStatus.textContent='Жауап жіберілмеді. Интернетті тексеріп, қайта көріңіз.';
-  rsvpStatus.classList.add('error');
- }finally{
-  rsvpSubmit.disabled=false;
-  rsvpSubmit.textContent='Жауапты жіберу';
- }
 });
 
-for(let i=0;i<22;i++){
- let p=document.createElement('span');
- p.className='petal';
- p.textContent=['✦','❀','·','❧'][i%4];
- p.style.left=Math.random()*100+'%';
- p.style.animationDuration=(9+Math.random()*12)+'s';
- p.style.animationDelay=(-Math.random()*18)+'s';
- p.style.fontSize=(12+Math.random()*15)+'px';
- p.style.setProperty('--drift',(Math.random()*180-90)+'px');
- document.body.appendChild(p);
+rsvpForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  rsvpStatus.textContent = '';
+  rsvpStatus.className = 'rsvp-status';
+
+  const payload = {
+    attendance: attendance.value,
+    guestCount: attendance.value === 'yes'
+      ? Number(guestCount.value)
+      : 0,
+    guests: attendance.value === 'yes'
+      ? Array.from(guestFields.querySelectorAll('input'))
+          .map(input => input.value.trim())
+      : []
+  };
+
+  if (attendance.value === 'yes' && payload.guests.some(name => !name)) {
+    rsvpStatus.textContent = 'Барлық адамның аты-жөнін жазыңыз.';
+    rsvpStatus.classList.add('error');
+    return;
+  }
+
+  rsvpSubmit.disabled = true;
+  rsvpSubmit.textContent = 'Жіберілуде…';
+
+  try {
+    const response = await fetch('/api/rsvp', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Жауапты жіберу мүмкін болмады.');
+    }
+
+    rsvpStatus.textContent = 'Жауабыңыз қабылданды! Рақмет.';
+    rsvpStatus.classList.add('ok');
+    rsvpForm.reset();
+    attendance.value = 'yes';
+    guestCount.value = '1';
+
+    document.querySelectorAll('.rsvp-choice').forEach(b => {
+      const active = b.dataset.answer === 'yes';
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-pressed', String(active));
+    });
+
+    guestDetails.hidden = false;
+    renderGuestFields();
+  } catch (err) {
+    rsvpStatus.textContent =
+      'Жауап жіберілмеді. Интернетті тексеріп, қайта көріңіз.';
+    rsvpStatus.classList.add('error');
+  } finally {
+    rsvpSubmit.disabled = false;
+    rsvpSubmit.textContent = 'Жауапты жіберу';
+  }
+});
+
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('span');
+  p.className = 'petal';
+  p.textContent = ['✦', '❀', '·', '❧'][i % 4];
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (9 + Math.random() * 12) + 's';
+  p.style.animationDelay = (-Math.random() * 18) + 's';
+  p.style.fontSize = (12 + Math.random() * 15) + 'px';
+  p.style.setProperty('--drift', (Math.random() * 180 - 90) + 'px');
+  document.body.appendChild(p);
 }
 </script>
 </body>
