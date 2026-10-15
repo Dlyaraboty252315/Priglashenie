@@ -69,8 +69,16 @@ const server = http.createServer((req, res) => {
 
   if (pathname === '/admin') pathname = '/admin.html';
   if (pathname === '/') pathname = '/index.html';
-  const filePath = path.join(ROOT, pathname);
-  if (!filePath.startsWith(ROOT)) { res.writeHead(403); return res.end('Forbidden'); }
+  const filePath = path.resolve(ROOT, '.' + pathname);
+
+if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) {
+  res.writeHead(403);
+  return res.end('Forbidden');
+}
+
+console.log('Запрошен файл:', pathname);
+console.log('Путь к файлу:', filePath);
+console.log('Файл существует:', fs.existsSync(filePath));
   fs.stat(filePath, (err, stat) => {
     if (!err && stat.isFile()) {
       const ext = path.extname(filePath).toLowerCase();
