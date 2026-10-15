@@ -1,49 +1,23 @@
-# Даниял & Гаухар — Беташар
+# Даниял & Гаухар — Үйлену тойы
 
-Готовое статическое приглашение, подготовленное для **GitHub + Railway**.
+Wedding invitation site with RSVP form. Guests can choose whether they will attend, select 1 or 2 guests, and enter the name(s).
 
-## Структура
+## Railway setup for collecting responses
 
-```text
-betashar-daniyal-gaukhar/
-├── index.html
-├── server.js
-├── package.json
-├── railway.toml
-├── assets/
-│   └── music.mp3
-├── .gitignore
-└── README.md
-```
+In Railway → your website service → Variables, add:
 
-## Запуск локально
+- `RSVP_ADMIN_KEY` = a long private password of your choice (keep it secret)
+- `RSVP_DATA_FILE` = `/data/rsvps.json`
 
-Нужен Node.js 18+.
+Then in Railway → your website service → Settings/Volumes, create a persistent volume mounted at `/data`. Without a persistent volume, responses stored on the app filesystem may be lost when the service redeploys or restarts.
 
-```bash
-npm install
-npm start
-```
+After redeploying:
+- Guest RSVP form is at the bottom of the invitation page.
+- Private response dashboard: `https://YOUR-DOMAIN/admin`
+- The dashboard accepts the `RSVP_ADMIN_KEY` and shows all replies, attendee totals, and a CSV export that opens in Excel.
 
-После запуска открой:
+Do not share the admin key or the `/admin` password with guests. Responses are stored on the server; this version does not send email or Telegram notifications.
 
-```text
-http://localhost:3000
-```
+## Run locally
 
-## Публикация через Railway
-
-1. Создай GitHub-репозиторий.
-2. Загрузи **все файлы и папки из этого проекта** в репозиторий.
-3. В Railway выбери создание нового проекта из GitHub-репозитория.
-4. Railway определит `package.json` и запустит `npm start`.
-5. После успешного Deploy открой настройки сервиса и создай **Public Domain / Generate Domain**.
-6. Открой выданный адрес — приглашение будет доступно в интернете.
-
-Сервер слушает `process.env.PORT`, который Railway предоставляет автоматически.
-
-## Важно
-
-Музыка запускается после взаимодействия пользователя с конвертом. Это необходимо из-за ограничений браузеров на автоматическое воспроизведение аудио.
-
-Проект не требует базы данных, Docker или отдельной сборки фронтенда.
+Requires Node.js 18+. Run `npm start` from this folder. For local response storage, the app writes to `data/rsvps.json` by default. Set `RSVP_ADMIN_KEY` before using `/admin`.
