@@ -109,7 +109,7 @@ const rsvpForm=document.getElementById('rsvpForm'), attendance=document.getEleme
 function renderGuestFields(){
  const count=Number(guestCount.value); guestFields.innerHTML='';
  for(let i=1;i<=count;i++){
-  const label=document.createElement('label');label.className='rsvp-field';label.htmlFor='guest'+i;label.textContent=count===1?'Аты-жөніңіз':`${i}-адамның аты-жөні`;
+  const label=document.createElement('label');label.className='rsvp-field';label.htmlFor='guest'+i;label.textContent=count===1?'Қонақтың аты-жөні':`${i}-қонақтың аты-жөні`;
   const input=document.createElement('input');input.id='guest'+i;input.name='guest'+i;input.maxLength=100;input.autocomplete=i===1?'name':'off';input.placeholder=i===1?'Мысалы: Айдос Нұрланов':'Мысалы: Айгүл Нұрланова';input.required=true;
   guestFields.append(label,input);
  }
